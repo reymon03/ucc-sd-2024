@@ -1,0 +1,1 @@
+docker build -t david/ejercicio-docker-03:latest .

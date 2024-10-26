@@ -1,0 +1,5 @@
+FROM python:latest
+run mkdir / app
+copy app.py / app
+workdir / app
+cmd ["python", "app.py"]

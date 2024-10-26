@@ -1,0 +1,1 @@
+docker run --rm david/ejercicio-docker-01

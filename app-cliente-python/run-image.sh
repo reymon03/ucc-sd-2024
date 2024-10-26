@@ -1,0 +1,1 @@
+docker run --rm david/app-cliente-python .

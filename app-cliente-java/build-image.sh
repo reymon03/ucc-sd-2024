@@ -1,0 +1,1 @@
+docker build -t david/app-cliente-java:latest .

@@ -2791,15 +2791,19 @@
     <fields>
       <field>
         <name>DR_NO</name>
+        <rename/>
       </field>
       <field>
         <name>Date Rptd</name>
+        <rename/>
       </field>
       <field>
         <name>AREA NAME</name>
+        <rename/>
       </field>
       <field>
         <name>Crm Cd Desc</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -3117,6 +3121,66 @@
     <GUI>
       <xloc>1616</xloc>
       <yloc>2608</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ununtu/oracle</connection>
+    <schema>ETL</schema>
+    <table>CRIME_LACITY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>DR_NO</column_name>
+        <stream_name>DR_NO</stream_name>
+      </field>
+      <field>
+        <column_name>DATE_RPTD</column_name>
+        <stream_name>Date Rptd</stream_name>
+      </field>
+      <field>
+        <column_name>AREA_NAME</column_name>
+        <stream_name>AREA NAME</stream_name>
+      </field>
+      <field>
+        <column_name>CRM_CD_DESC</column_name>
+        <stream_name>Crm Cd Desc</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1184</xloc>
+      <yloc>384</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -5490,66 +5554,6 @@
     <GUI>
       <xloc>1616</xloc>
       <yloc>2784</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Table output</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>ununtu/oracle</connection>
-    <schema>ETL</schema>
-    <table>CRIME_LACITY</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-      <field>
-        <column_name>DR_NO</column_name>
-        <stream_name>DR_NO</stream_name>
-      </field>
-      <field>
-        <column_name>DATE_RPTD</column_name>
-        <stream_name>Date Rptd</stream_name>
-      </field>
-      <field>
-        <column_name>AREA_NAME</column_name>
-        <stream_name>AREA NAME</stream_name>
-      </field>
-      <field>
-        <column_name>CRM_CD_DESC</column_name>
-        <stream_name>Crm Cd Desc</stream_name>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1184</xloc>
-      <yloc>384</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
