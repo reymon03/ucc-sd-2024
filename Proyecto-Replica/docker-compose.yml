@@ -1,0 +1,118 @@
+services:
+  postgres_primary:
+    image: postgres:14-alpine
+    restart: always
+    user: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256\nhost replication all 0.0.0.0/0 md5"
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    healthcheck:
+      test: 'pg_isready -U user --dbname=postgres'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./00_init.sql:/docker-entrypoint-initdb.d/00_init.sql
+    networks:
+      - my_network
+    command: |
+      postgres 
+      -c wal_level=replica 
+      -c hot_standby=on 
+      -c max_wal_senders=10 
+      -c max_replication_slots=10 
+      -c hot_standby_feedback=on
+
+  oracle:
+    image: gvenzl/oracle-free
+    container_name: oracle-etl
+    environment:
+      - ORACLE_DATABASE=ORCL
+      - APP_USER=ETL
+      - APP_USER_PASSWORD=ETL
+      - ORACLE_PASSWORD=oracle
+    ports:
+      - "1521:1521"
+    networks:
+      - my_network
+    restart: always
+
+  postgres_replica:
+    image: postgres:14-alpine
+    restart: always
+    user: postgres
+    ports:
+      - 5433:5432
+    environment:
+      PGUSER: replicator
+      PGPASSWORD: replicator_password
+    healthcheck:
+      test: 'pg_isready -U replicator --dbname=postgres'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - postgres_primary
+    networks:
+      - my_network
+    command: |
+      bash -c "
+      until pg_basebackup --pgdata=/var/lib/postgresql/data -R --slot=replication_slot --host=postgres_primary --port=5432
+      do
+        echo 'Waiting for primary to connect...'
+        sleep 1s
+      done
+      echo 'Backup done, starting replica...'
+      chmod 0700 /var/lib/postgresql/data
+      postgres
+      "
+
+  app:
+    build:
+      context: ./app-py
+      dockerfile: Dockerfile
+    container_name: app
+    depends_on:
+      - postgres_primary
+    environment:
+      DB_HOST: postgres_primary
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USER: user
+      DB_PASSWORD: password
+    volumes:
+      - ./app-py:/app
+    networks:
+      - my_network
+    restart: always
+    ports:
+      - "5001:5000"
+
+  app2:
+    build:
+      context: ./app-py 
+      dockerfile: Dockerfile
+    container_name: app2
+    depends_on:
+      - postgres_primary
+    environment:
+      DB_HOST: postgres_primary
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USER: user
+      DB_PASSWORD: password
+    networks:
+      - my_network
+    ports:
+      - "5002:5000"
+    command: ["python", "app2.py"]  
+    restart: always
+
+networks:
+  my_network:
+    driver: bridge
